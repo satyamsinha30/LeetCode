@@ -11,27 +11,27 @@
  */
 public class Solution {
     public boolean hasCycle(ListNode head) {
-        Set<ListNode> seen=new HashSet<>();
-        while(head!=null){
-            if(seen.contains(head)){
-                return true;
-            }
-            seen.add(head);
-            head=head.next;
-        }
-        return false;
-        // if(head==null)
-        //     return false;
-        // ListNode slowPointer=head;
-        // ListNode fastPointer=head.next;
-        // while(slowPointer!=fastPointer){
-        //     if(fastPointer==null || fastPointer.next== null){
-        //         return false;
+        // Set<ListNode> seen=new HashSet<>();
+        // while(head!=null){
+        //     if(seen.contains(head)){
+        //         return true;
         //     }
-        //     slowPointer=slowPointer.next;
-        //     fastPointer=fastPointer.next.next;
+        //     seen.add(head);
+        //     head=head.next;
         // }
-        // return true;
+        // return false;
+        if(head==null)
+            return false;
+        ListNode slowPointer=head;
+        ListNode fastPointer=head.next;
+        while(slowPointer!=fastPointer){
+            if(fastPointer==null || fastPointer.next== null){
+                return false;
+            }
+            slowPointer=slowPointer.next;
+            fastPointer=fastPointer.next.next;
+        }
+        return true;
         
     }
 }
