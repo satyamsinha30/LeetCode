@@ -23,23 +23,63 @@ class Solution {
         }
         return true;
     }
-    public int strStr(String haystack, String needle) {
-        char[] text=haystack.toCharArray();
-        char[] pattern=needle.toCharArray();
-        int m=pattern.length;
-        int n=text.length;
-        if(m>n)
-            return -1;
-        long hashPattern=calculateHash(pattern,m-1);
-        long hashText=calculateHash(text,m-1);
-        for(int i=1;i<=n-m+1;i++){
-            if(hashPattern==hashText && checkEqual(pattern,0,m-1,text,i-1,i+m-2)){
-                return i-1;
+    private int[] computeLps(char[] pattern){
+        int[] lps=new int[pattern.length];
+        int i=0,j=1;
+        while(j<pattern.length){
+            if(pattern[j]==pattern[i]){
+                lps[j]=i+1;
+                i++;j++;
+            }else{
+                if(i!=0){
+                    i=lps[i-1];
+                }else{
+                    lps[j]=0;
+                    j++;
+                }
             }
-            if(i<n-m+1)
-                hashText=recalculateHash(text,i-1,i+m-1,hashText,m);
         }
-        return -1;
+        return lps;
+    }
+    private int KMP(char[] text,char[] pattern){
+        int[] lps=computeLps(pattern);
+        int i=0,j=0;
+        while(i<text.length && j<pattern.length){
+            if(text[i]==pattern[j]){
+                i++;
+                j++;
+            }else{
+                if(j!=0){
+                    j=lps[j-1];
+                }else{
+                    i++;
+                }
+            }
+        }
+        if(j== pattern.length)
+            return i-j;
+        else 
+            return -1;
+    }
+    public int strStr(String haystack, String needle) {
+        return KMP(haystack.toCharArray(),needle.toCharArray());
+        
+        // char[] text=haystack.toCharArray();
+        // char[] pattern=needle.toCharArray();
+        // int m=pattern.length;
+        // int n=text.length;
+        // if(m>n)
+        //     return -1;
+        // long hashPattern=calculateHash(pattern,m-1);
+        // long hashText=calculateHash(text,m-1);
+        // for(int i=1;i<=n-m+1;i++){
+        //     if(hashPattern==hashText && checkEqual(pattern,0,m-1,text,i-1,i+m-2)){
+        //         return i-1;
+        //     }
+        //     if(i<n-m+1)
+        //         hashText=recalculateHash(text,i-1,i+m-1,hashText,m);
+        // }
+        // return -1;
         
         //Brute force(Trivial)
 //         int M=haystack.length();
